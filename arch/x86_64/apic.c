@@ -14,6 +14,7 @@
 enum {
 	APIC_EOI = 0x80b,
 	APIC_SPIV = 0x80f,
+	APIC_ICR = 0x830,		// Interrupt Command Register (ICR)
 	APIC_LVT_TIMER  = 0x832,
 	ACPI_LVT_LINT0  = 0x835,
 	APIC_TIMER_IC = 0x838,		// Timer initial count (IC) register
@@ -64,6 +65,22 @@ static void apic_eoi(void)
 void end_of_interrupt(void)
 {
 	apic_eoi();
+}
+
+// APIC ICR delivery mode.
+enum {
+	APIC_DM_INIT = 0b101,
+	APIC_DM_STARTUP = 0b110,
+};
+
+static void apic_write_icr(uint64_t val)
+{
+	apic_write(APIC_ICR, val);
+}
+
+static void apic_send_ipi(uint32_t dest_id, uint32_t val)
+{
+	apic_write_icr((uint64_t) dest_id << 32 | val);
 }
 
 static void apic_timer_init(void)
