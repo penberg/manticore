@@ -8,6 +8,7 @@
 #include <kernel/irq.h>
 
 #include <stdbool.h>
+#include <assert.h> // FIXME
 
 /* Local APIC registers in MSR offsets. Specified in Table 10-6 ("Local APIC
    Register Address Map Supported by x2APIC") of Intel SDM.  */
@@ -81,6 +82,11 @@ static void apic_write_icr(uint64_t val)
 static void apic_send_ipi(uint32_t dest_id, uint32_t val)
 {
 	apic_write_icr((uint64_t) dest_id << 32 | val);
+}
+
+void apic_ipi_allbutself(unsigned vector)
+{
+	apic_write_icr(vector);
 }
 
 static void apic_timer_init(void)

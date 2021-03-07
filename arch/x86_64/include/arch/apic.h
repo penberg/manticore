@@ -11,6 +11,8 @@ struct msi_message {
 
 void apic_compose_msi_msg(struct msi_message *msg, uint8_t vector, uint8_t dest_id);
 
+void apic_ipi_allbutself(unsigned vector);
+
 bool apic_is_bsp(void);
 
 void init_apic(void);
