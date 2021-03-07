@@ -88,6 +88,7 @@ void arch_early_setup(void)
 	init_mmu_map();
 	init_apic();
 	setup_nxe();
+	smp_init();
 }
 
 void arch_late_setup(void)
